@@ -11915,6 +11915,7 @@ div#notebook {
     <span class="n">hls</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2HLS</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
     <span class="n">l_channel</span> <span class="o">=</span> <span class="n">hls</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">s_channel</span> <span class="o">=</span> <span class="n">hls</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
+
     <span class="c1"># Sobel x</span>
     <span class="n">sobelx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">l_channel</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># Take the derivative in x</span>
     <span class="n">abs_sobelx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">sobelx</span><span class="p">)</span> <span class="c1"># Absolute x derivative to accentuate lines away from horizontal</span>
@@ -12218,22 +12219,8 @@ div#notebook {
         <span class="n">right_fit</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">margin</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">nonzerox</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">right_fit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nonzeroy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> 
         <span class="n">right_fit</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">nonzeroy</span> <span class="o">+</span> <span class="n">right_fit</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">margin</span><span class="p">)))</span>  
 
-    <span class="c1"># Again, extract left and right line pixel positions</span>
-    <span class="n">leftx</span> <span class="o">=</span> <span class="n">nonzerox</span><span class="p">[</span><span class="n">left_inds</span><span class="p">]</span>
-    <span class="n">lefty</span> <span class="o">=</span> <span class="n">nonzeroy</span><span class="p">[</span><span class="n">left_inds</span><span class="p">]</span> 
-    <span class="n">rightx</span> <span class="o">=</span> <span class="n">nonzerox</span><span class="p">[</span><span class="n">right_inds</span><span class="p">]</span>
-    <span class="n">righty</span> <span class="o">=</span> <span class="n">nonzeroy</span><span class="p">[</span><span class="n">right_inds</span><span class="p">]</span>
-    <span class="c1"># Fit a second order polynomial to each</span>
-    <span class="n">left_fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">lefty</span><span class="p">,</span> <span class="n">leftx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">right_fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">righty</span><span class="p">,</span> <span class="n">rightx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="c1"># Generate x and y values for plotting</span>
-    <span class="c1">#ploty = np.linspace(0, binary_warped.shape[0]-1, binary_warped.shape[0] )</span>
-    <span class="c1">#left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]</span>
-    <span class="c1">#right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]</span>
-    
-
    
-    <span class="k">return</span> <span class="n">left_fit</span><span class="p">,</span> <span class="n">right_fit</span><span class="p">,</span> <span class="n">left_inds</span><span class="p">,</span> <span class="n">right_inds</span><span class="p">,</span> <span class="n">nonzerox</span><span class="p">,</span> <span class="n">nonzeroy</span>
+    <span class="k">return</span> <span class="n">left_inds</span><span class="p">,</span> <span class="n">right_inds</span>
     
 </pre></div>
 
@@ -12256,7 +12243,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 0 Chessboard distortion/undistortion</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 0a Chessboard distortion/undistortion</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
@@ -12304,7 +12291,58 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 0b Chessboard distortion/undistortion</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+
+<span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;straight_lines1.jpg&#39;</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_images/&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">mtx</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">camera_calibration</span><span class="p">()</span>
+
+<span class="n">undist_image</span> <span class="o">=</span> <span class="n">img_undistort</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+
+<span class="c1"># debug below</span>
+<span class="c1"># visualization</span>
+<span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Original Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">undist_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Undistorted Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;output_images/undistorted_&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(720, 1280, 3)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 1 Color/gradient visualization</span>
@@ -12317,7 +12355,7 @@ div#notebook {
 <span class="n">image</span> <span class="o">=</span> <span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_images/&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+<span class="n">binary_image</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="n">undist_image</span><span class="p">,</span> <span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
 
 <span class="c1"># debug below</span>
 <span class="c1"># visualization</span>
@@ -12353,7 +12391,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 2 Warp function visualization</span>
@@ -12400,7 +12438,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 3 Sliding windows first function visualization</span>
@@ -12431,10 +12469,28 @@ div#notebook {
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt output_prompt">Out[15]:</div>
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(720, 0)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 4 sliding windows alt1 function visualization </span>
@@ -12491,7 +12547,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[67]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 5 Find radius of curvature</span>
@@ -12566,8 +12622,8 @@ div#notebook {
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>249484.185522 132240.540118
-81515.3280305 m 43030.995527 m
+<pre>84591.0628787 110252.904967
+27623.9603911 m 35883.9107241 m
 </pre>
 </div>
 </div>
@@ -12578,7 +12634,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 6 visualization</span>
@@ -12590,8 +12646,8 @@ div#notebook {
 <span class="n">out_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">binary_warped</span><span class="p">,</span> <span class="n">binary_warped</span><span class="p">,</span> <span class="n">binary_warped</span><span class="p">))</span><span class="o">*</span><span class="mi">255</span>
 <span class="n">window_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">out_img</span><span class="p">)</span>
 
-<span class="n">left_fit</span><span class="p">,</span> <span class="n">right_fit</span><span class="p">,</span> <span class="n">left_inds</span><span class="p">,</span> <span class="n">right_inds</span><span class="p">,</span> <span class="n">nonzerox</span><span class="p">,</span> <span class="n">nonzeroy</span> <span class="o">=</span> <span class="n">create_lane_line_windows2</span><span class="p">(</span><span class="n">binary_warped</span><span class="p">,</span> <span class="n">left_fit</span><span class="p">,</span> <span class="n">right_fit</span><span class="p">)</span>
-
+<span class="n">_</span><span class="p">,</span> <span class="n">left_fit</span><span class="p">,</span> <span class="n">right_fit</span><span class="p">,</span> <span class="n">left_lane_inds</span><span class="p">,</span> <span class="n">right_lane_inds</span><span class="p">,</span> <span class="n">nonzerox</span><span class="p">,</span> <span class="n">nonzeroy</span> <span class="o">=</span> <span class="n">create_lane_line_windows</span><span class="p">(</span><span class="n">binary_warped</span><span class="p">)</span>
+<span class="c1">#left_fit, right_fit, left_inds, right_inds, nonzerox, nonzeroy = create_lane_line_windows2(binary_warped, left_fit, right_fit)</span>
 
 
 <span class="n">ploty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">binary_warped</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">binary_warped</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
@@ -12633,7 +12689,7 @@ div#notebook {
 
 
 <div class="output_area">
-<div class="prompt output_prompt">Out[71]:</div>
+<div class="prompt output_prompt">Out[20]:</div>
 
 
 
@@ -12649,7 +12705,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 7 Drawing the final image</span>
@@ -12758,6 +12814,20 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Get matrix and info for camera calibration</span>
+<span class="n">mtx</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">camera_calibration</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Text for curvature and offset</span>
 <span class="n">topline_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="n">bottomline_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -12772,17 +12842,30 @@ div#notebook {
     <span class="k">global</span> <span class="n">bottomline_text</span>
     
     <span class="c1"># various globals for smoothing</span>
-    <span class="k">global</span> <span class="n">last_left_pts</span>
-    <span class="k">global</span> <span class="n">last_right_pts</span>
+    <span class="k">global</span> <span class="n">all_left_fits</span><span class="p">,</span> <span class="n">all_right_fits</span>
+    <span class="k">global</span> <span class="n">last_left_pts</span><span class="p">,</span> <span class="n">last_right_pts</span>
+    
+    <span class="c1"># Undistort original camera image</span>
+    <span class="n">undis_image</span> <span class="o">=</span> <span class="n">img_undistort</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mtx</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
     
     <span class="c1"># Color and gradient filters</span>
-    <span class="n">binary_image</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+    <span class="n">binary_image</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="n">undis_image</span><span class="p">,</span> <span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
     
-    <span class="c1"># distorted warped binary image</span>
+    <span class="c1"># warped binary image</span>
     <span class="n">binary_warped</span> <span class="o">=</span> <span class="n">warp_image</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
 
     <span class="c1"># Uses alt1 image to fit lane lines and find sliding windows</span>
     <span class="c1">#</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    left_inds = []</span>
+<span class="sd">    right_inds = []</span>
+<span class="sd">    if len(last_left_pts) and len(last_right_pts):</span>
+<span class="sd">        left_inds, right_inds = create_lane_line_windows2(binary_warped, all_left_fits[-1], all_right_fits[-1])</span>
+<span class="sd">    else :</span>
+<span class="sd">        left_inds, right_inds, _, _ = create_lane_line_windows_alt1(binary_warped)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
     <span class="n">left_inds</span><span class="p">,</span> <span class="n">right_inds</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">create_lane_line_windows_alt1</span><span class="p">(</span><span class="n">binary_warped</span><span class="p">)</span>
 
     <span class="n">nonzero</span> <span class="o">=</span> <span class="n">binary_warped</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
@@ -12798,6 +12881,9 @@ div#notebook {
     <span class="c1"># Fit a second order polynomial to each</span>
     <span class="n">left_fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">lefty</span><span class="p">,</span> <span class="n">leftx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">right_fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">righty</span><span class="p">,</span> <span class="n">rightx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    
+    <span class="n">all_left_fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">left_fit</span><span class="p">)</span>
+    <span class="n">all_right_fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">right_fit</span><span class="p">)</span>
     
     <span class="c1"># Plot the lane line according to the fit</span>
     <span class="n">ploty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">binary_warped</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">binary_warped</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
@@ -12856,7 +12942,7 @@ div#notebook {
 
     <span class="c1"># Define conversions in x and y from pixels space to meters</span>
     <span class="n">ym_per_pix</span> <span class="o">=</span> <span class="mi">30</span><span class="o">/</span><span class="mi">720</span> <span class="c1"># meters per pixel in y dimension</span>
-    <span class="n">xm_per_pix</span> <span class="o">=</span> <span class="mf">3.7</span><span class="o">/</span><span class="mi">700</span> <span class="c1"># meters per pixel in x dimension</span>
+    <span class="n">xm_per_pix</span> <span class="o">=</span> <span class="mf">3.7</span><span class="o">/</span><span class="mi">600</span> <span class="c1"># meters per pixel in x dimension</span>
 
     <span class="c1"># Fit new polynomials to x,y in world space</span>
     <span class="n">left_fit_cr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">ploty</span><span class="o">*</span><span class="n">ym_per_pix</span><span class="p">,</span> <span class="n">left_fitx</span><span class="o">*</span><span class="n">xm_per_pix</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -12922,7 +13008,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import everything needed to edit/save/watch video clips</span>
@@ -12931,6 +13017,8 @@ div#notebook {
 
 <span class="n">num_frames</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="c1"># To keep track of fits</span>
+<span class="n">all_left_fits</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_right_fits</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">last_left_pts</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">last_right_pts</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -12966,7 +13054,7 @@ div#notebook {
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|█████████████████████████████████████▉| 1260/1261 [01:39&lt;00:00, 12.68it/s]
+<pre>100%|█████████████████████████████████████▉| 1260/1261 [02:12&lt;00:00,  9.24it/s]
 </pre>
 </div>
 </div>
@@ -12978,7 +13066,7 @@ div#notebook {
 <pre>[MoviePy] Done.
 [MoviePy] &gt;&gt;&gt;&gt; Video ready: project_video_output.mp4 
 
-Wall time: 1min 40s
+Wall time: 2min 13s
 </pre>
 </div>
 </div>
@@ -14342,10 +14430,10 @@ Read a new frame:  False
 
  
  
-<div id="ae059c1a-0297-4ee5-a224-11761e1d2c5e"></div>
+<div id="81397844-f4f0-4022-9943-fd1f2f72c807"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#ae059c1a-0297-4ee5-a224-11761e1d2c5e');
+var element = $('#81397844-f4f0-4022-9943-fd1f2f72c807');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "3126773e06bb41578f16b19ade76180e"}

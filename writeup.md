@@ -14,6 +14,7 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: output_images/undistorted_calibration1.jpg "Undistorted"
+[image7]: output_images/undistorted_straight_lines1.jpg "Undistorted Test Frame"
 [image2]: output_images/binary_straight_lines1.jpg "Binary Example"
 [image3]: output_images/binary_warped_straight_lines1.jpg "Warp Example"
 [image4]: output_images/line_fits_straight_lines1.jpg "Sliding Windows Visualization"
@@ -37,6 +38,9 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result:
 
 ![alt text][image1]
+![alt text][image7]
+
+Per the first submission, I did leave out the undistortion step in the pipeline, but I have corrected it in this submission.
 
 ### Pipeline (single images)
 
@@ -76,6 +80,7 @@ I verified that my perspective transform was working as expected by drawing the 
 (Code for this step is in the various create_lane_line_windows functions in the notebook)
 
 The lesson used a sliding window method in order to find lane lines.  This consisted of a histogram on various parts of the image in order to find the greatest grouping of pixels indicating lane lines.  In the pipeline for the video, I slightly altered the initial function and used create_lane_line_windows_alt1, which I find slightly more readable, though both functions are very similar.  I then essentially followed the steps in the lesson the rest of the code.  This led to a video which was about 98% successful in detecting the lines.  I ran into a couple tough spots which I tried several ways to improve.  Initially, I saved line fits and kept a running average.  I then compared the current fit to the average to try to find 'bad' fits.  This wasn't very successful, and ended up converging on one fit which didn't change after a point in the video.  I then tried keeping a running average of lane widths, which did better but still not ideal.  Finally, I tested the upper-most endpoint of the fit on each side and compared it to a running average.  I then threw out any that were over a threshold (50 pixels) and replaced the fit for that side.  This ended up performing better than the other methods, though still not flawlessly.  You can see an example of the sliding window below in the first image, and a polynomial fit in the second image.
+I tested the other version of the function, create_lane_line_windows2, but found that didn't really improve the fits, and in some cases led to more bad fits.
 
 
 ![alt text][image4]
@@ -101,4 +106,5 @@ Most of this code comes straight from the lesson, with very little alteration.  
 
 ### Discussion
 
-##### By far the most difficult part of this project was trying to correct the 2% of bad frames or fits in the video.  I spent many hours over several days trying to find a method which consistently could pick out bad frames.  I tried testing the fit coefficients, lane width, number of points detected, before finally deciding on a running average of the endpoints of the upper lane limbs as a standard (a margin around this point).  I also tried different thresholds and color maps in the color and gradient code, but ultimately didn't see much improvement to the current ones.  Although my final method is adequate, it probably still needs more improvement.  I didn't have time to test on the challenge videos, but I imagine changes could be made to improve detection especially in low-light or obscured conditions.  Not to mention the case where a road has no lines at all; this model would fail spectacularly.
+By far the most difficult part of this project was trying to correct the 2% of bad frames or fits in the video.  I spent many hours over several days trying to find a method which consistently could pick out bad frames.  I tried testing the fit coefficients, lane width, number of points detected, before finally deciding on a running average of the endpoints of the upper lane limbs as a standard (a margin around this point).  I also tried different thresholds and color maps in the color and gradient code, but ultimately didn't see much improvement to the current ones.  Although my final method is adequate, it probably still needs more improvement.  I didn't have time to test on the challenge videos, but I imagine changes could be made to improve detection especially in low-light or obscured conditions.  Not to mention the case where a road has no lines at all; this model would fail spectacularly.
+For the second submission, I added an undistorted version of a test frame image, and changed the lane width correction to 600 pixels as mentioned in the first review.  The second sliding windows function was not implemented as it seemed to increase the number of bad fits in some cases.
