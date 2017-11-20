@@ -12929,7 +12929,7 @@ div#notebook {
     <span class="n">M_inv</span> <span class="o">=</span> <span class="n">get_unwarp_mtx</span><span class="p">()</span>
     <span class="n">newwarp</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">warpPerspective</span><span class="p">(</span><span class="n">color_warp</span><span class="p">,</span> <span class="n">M_inv</span><span class="p">,</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> 
     <span class="c1"># Combine the result with the original image</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">addWeighted</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">newwarp</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">addWeighted</span><span class="p">(</span><span class="n">undis_image</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">newwarp</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="c1">#</span>
     <span class="c1">#</span>
     <span class="c1">#</span>
@@ -13054,7 +13054,7 @@ div#notebook {
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>100%|█████████████████████████████████████▉| 1260/1261 [02:12&lt;00:00,  9.24it/s]
+<pre>100%|█████████████████████████████████████▉| 1260/1261 [02:39&lt;00:00,  9.15it/s]
 </pre>
 </div>
 </div>
@@ -13066,7 +13066,7 @@ div#notebook {
 <pre>[MoviePy] Done.
 [MoviePy] &gt;&gt;&gt;&gt; Video ready: project_video_output.mp4 
 
-Wall time: 2min 13s
+Wall time: 2min 40s
 </pre>
 </div>
 </div>
@@ -14430,10 +14430,10 @@ Read a new frame:  False
 
  
  
-<div id="81397844-f4f0-4022-9943-fd1f2f72c807"></div>
+<div id="f14978a9-830e-4135-9748-daead46a0555"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#81397844-f4f0-4022-9943-fd1f2f72c807');
+var element = $('#f14978a9-830e-4135-9748-daead46a0555');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "3126773e06bb41578f16b19ade76180e"}
